@@ -14,9 +14,11 @@ A \code{local_source} object, for use with \code{\link[=quiver_install]{quiver_i
 }
 \description{
 Treats \code{path} as a checkout of a skills repository: skills live at
-\verb{path/skills/<name>/}, each with a \code{SKILL.md}, same layout as a 'GitHub'
-source. Useful for developing a skill locally, or installing from a
-repository you've already cloned.
+\verb{path/skills/<name>/}, each with a \code{SKILL.md}. Useful for developing a
+skill locally, or installing from a repository you've already cloned —
+as long as it uses that flat layout. A repository organised into
+categories (as \code{\link[=github_source]{github_source()}} supports) needs to be installed
+straight from 'GitHub' rather than from a local checkout.
 }
 \examples{
 checkout <- tempfile("quiver-checkout")

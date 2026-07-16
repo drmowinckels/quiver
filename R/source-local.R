@@ -1,9 +1,11 @@
 #' Reference a local directory as a skill source
 #'
 #' Treats `path` as a checkout of a skills repository: skills live at
-#' `path/skills/<name>/`, each with a `SKILL.md`, same layout as a 'GitHub'
-#' source. Useful for developing a skill locally, or installing from a
-#' repository you've already cloned.
+#' `path/skills/<name>/`, each with a `SKILL.md`. Useful for developing a
+#' skill locally, or installing from a repository you've already cloned —
+#' as long as it uses that flat layout. A repository organised into
+#' categories (as [github_source()] supports) needs to be installed
+#' straight from 'GitHub' rather than from a local checkout.
 #'
 #' @param path Path to the directory containing a `skills/` folder.
 #'
@@ -51,7 +53,7 @@ source_skill_files.local_source <- function(source, skill) {
 
 #' @exportS3Method
 source_copy_file.local_source <- function(source, skill, file, dest) {
-  fs::dir_create(fs::path_dir(dest), recurse = TRUE)
+  ensure_parent_dir(dest)
   fs::file_copy(file$abspath, dest, overwrite = TRUE)
   invisible(dest)
 }
