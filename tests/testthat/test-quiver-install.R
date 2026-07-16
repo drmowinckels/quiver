@@ -158,7 +158,7 @@ describe("quiver_install()", {
 
   it("installs at user scope regardless of path", {
     home <- withr::local_tempdir()
-    withr::local_envvar(HOME = home)
+    local_mocked_bindings(path_home = function(...) home, .package = "fs")
     root <- withr::local_tempdir()
 
     install_skill(root, "demo-skill", scope = "user")

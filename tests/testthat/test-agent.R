@@ -14,7 +14,7 @@ describe("agent_skills_dir()", {
 
   it("resolves a user-scope path under the home directory, ignoring path", {
     home <- withr::local_tempdir()
-    withr::local_envvar(HOME = home)
+    local_mocked_bindings(path_home = function(...) home, .package = "fs")
     expect_equal(
       agent_skills_dir("opencode", "user", "myproject"),
       fs::path(home, ".opencode", "skills")
