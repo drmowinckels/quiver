@@ -1,0 +1,24 @@
+Package: quiver
+Title: Install Agent Skills From Any Source
+Version: 0.0.0.9000
+Authors@R: 
+    person("Athanasia Monika", "Mowinckel", , "a.m.mowinckel@psykologi.uio.no", role = c("aut", "cre"))
+Description: A source- and agent-agnostic engine for installing Agent
+    Skills (<https://www.anthropic.com/news/skills>) into a project or
+    user profile. Skills can be resolved from a local directory, a
+    'GitHub' repository, or a curated registry, and installed for any
+    agent adapter, at project or user scope, with checksum-based
+    protection against clobbering hand edits.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports: 
+    cli,
+    digest,
+    fs,
+    jsonlite
+Suggests: 
+    testthat (>= 3.0.0),
+    withr
+Config/testthat/edition: 3
