@@ -28,7 +28,7 @@ describe("source_list_skills.github_source()", {
 
   it("resolves the tree only once across repeated calls", {
     calls <- 0
-    testthat::local_mocked_bindings(
+    local_mocked_bindings(
       resolve_ref = function(repo, ref = NULL) "v0.1.0",
       resolve_commit_sha = function(repo, ref) "deadbeef",
       get_repo_tree = function(repo, sha) {
@@ -99,7 +99,7 @@ describe("quiver_install() with a github_source()", {
   it("installs a skill end-to-end from a mocked github source", {
     local_mocked_github_source()
     project <- withr::local_tempdir()
-    testthat::capture_messages(
+    capture_messages(
       quiver_install(
         "demo-skill",
         github_source("rladies/grimoire"),

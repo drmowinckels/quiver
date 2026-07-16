@@ -18,7 +18,7 @@ describe("resolve_ref()", {
   })
 
   it("returns the latest release tag when ref is NULL", {
-    testthat::local_mocked_bindings(
+    local_mocked_bindings(
       gh = function(endpoint, ...) list(tag_name = "v0.1.0"),
       .package = "gh"
     )
@@ -26,7 +26,7 @@ describe("resolve_ref()", {
   })
 
   it("falls back to the default branch when there are no releases", {
-    testthat::local_mocked_bindings(
+    local_mocked_bindings(
       gh = function(endpoint, ...) {
         if (grepl("releases/latest", endpoint)) {
           stop("404 Not Found")
@@ -41,7 +41,7 @@ describe("resolve_ref()", {
 
 describe("resolve_commit_sha()", {
   it("returns the commit sha for a ref", {
-    testthat::local_mocked_bindings(
+    local_mocked_bindings(
       gh = function(endpoint, ...) list(sha = "deadbeef"),
       .package = "gh"
     )
@@ -49,7 +49,7 @@ describe("resolve_commit_sha()", {
   })
 
   it("short-circuits without an API call when ref is already a full sha", {
-    testthat::local_mocked_bindings(
+    local_mocked_bindings(
       gh = function(endpoint, ...) cli::cli_abort("should not be called"),
       .package = "gh"
     )
@@ -60,7 +60,7 @@ describe("resolve_commit_sha()", {
 
 describe("get_repo_tree()", {
   it("returns the tree entries", {
-    testthat::local_mocked_bindings(
+    local_mocked_bindings(
       gh = function(endpoint, ...) list(tree = fixture_github_tree()),
       .package = "gh"
     )
@@ -219,7 +219,7 @@ describe("download_file_to()", {
     dest_dir <- withr::local_tempdir()
     dest <- fs::path(dest_dir, "nested", "SKILL.md")
     called_with <- NULL
-    testthat::local_mocked_bindings(
+    local_mocked_bindings(
       curl_download = function(url, destfile, ...) {
         called_with <<- url
         writeLines("content", destfile)

@@ -43,7 +43,7 @@ install_skill <- function(
   env = parent.frame()
 ) {
   source_root <- local_source_root(env = env)
-  testthat::capture_messages(
+  capture_messages(
     quiver_install(
       skill,
       local_source(source_root),
@@ -86,7 +86,7 @@ fixture_github_tree <- function() {
 }
 
 local_mocked_github_source <- function(env = parent.frame(), sha = "deadbeef") {
-  testthat::local_mocked_bindings(
+  local_mocked_bindings(
     resolve_ref = function(repo, ref = NULL) ref %||% "v0.1.0",
     resolve_commit_sha = function(repo, ref) sha,
     get_repo_tree = function(repo, sha) fixture_github_tree(),
