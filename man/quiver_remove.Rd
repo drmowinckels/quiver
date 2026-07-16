@@ -38,8 +38,18 @@ When the last skill for an agent/scope is removed, the manifest file
 (and the now-empty skills directory) are cleaned up too.
 }
 \examples{
-\dontrun{
-quiver_remove("demo-skill", agent = "claude")
-}
+checkout <- tempfile("quiver-checkout")
+dir.create(file.path(checkout, "skills", "demo-skill"), recursive = TRUE)
+writeLines(
+  c("---", "name: demo-skill", "description: Demo skill.", "---"),
+  file.path(checkout, "skills", "demo-skill", "SKILL.md")
+)
+
+source <- local_source(checkout)
+project <- tempfile("quiver-project")
+dir.create(project)
+quiver_install("demo-skill", source, agent = "claude", path = project)
+
+quiver_remove("demo-skill", agent = "claude", path = project)
 
 }

@@ -8,6 +8,14 @@
 \description{
 A source- and agent-agnostic engine for installing Agent Skills (\url{https://www.anthropic.com/news/skills}) into a project or user profile. Skills can be resolved from a local directory, a 'GitHub' repository, or a curated registry, and installed for any agent adapter, at project or user scope, with checksum-based protection against clobbering hand edits.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/drmowinckels/quiver}
+  \item Report bugs at \url{https://github.com/drmowinckels/quiver/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Athanasia Monika Mowinckel \email{a.m.mowinckel@psykologi.uio.no}
 

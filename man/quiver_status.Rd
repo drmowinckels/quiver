@@ -27,8 +27,18 @@ Prints, and invisibly returns, which skills are installed for a given
 agent and scope, and whether any have been hand-edited since install.
 }
 \examples{
-\dontrun{
-quiver_status(agent = "claude")
-}
+checkout <- tempfile("quiver-checkout")
+dir.create(file.path(checkout, "skills", "demo-skill"), recursive = TRUE)
+writeLines(
+  c("---", "name: demo-skill", "description: Demo skill.", "---"),
+  file.path(checkout, "skills", "demo-skill", "SKILL.md")
+)
+
+source <- local_source(checkout)
+project <- tempfile("quiver-project")
+dir.create(project)
+quiver_install("demo-skill", source, agent = "claude", path = project)
+
+quiver_status(agent = "claude", path = project)
 
 }

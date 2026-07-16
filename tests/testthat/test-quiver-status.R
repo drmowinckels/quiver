@@ -2,7 +2,7 @@ describe("quiver_status()", {
   it("reports no skills installed when the manifest is empty", {
     root <- withr::local_tempdir()
     expect_snapshot(result <- quiver_status(agent = "claude", path = root))
-    expect_equal(nrow(result), 0)
+    expect_identical(nrow(result), 0L)
   })
 
   it("reports an installed, unmodified skill", {
@@ -10,7 +10,7 @@ describe("quiver_status()", {
     install_skill(root, "demo-skill")
 
     expect_snapshot(result <- quiver_status(agent = "claude", path = root))
-    expect_equal(result$skill, "demo-skill")
+    expect_identical(result$skill, "demo-skill")
     expect_false(result$modified)
   })
 
@@ -37,7 +37,7 @@ describe("quiver_status()", {
       opencode_status <- quiver_status(agent = "opencode", path = root)
     )
 
-    expect_equal(nrow(claude_status), 1)
-    expect_equal(nrow(opencode_status), 0)
+    expect_identical(nrow(claude_status), 1L)
+    expect_identical(nrow(opencode_status), 0L)
   })
 })

@@ -9,11 +9,9 @@
 #'
 #' @return A `local_source` object, for use with [quiver_install()].
 #'
+#' @example man-roxygen/ex-setup-source.R
 #' @examples
-#' \dontrun{
-#' source <- local_source("path/to/checkout")
-#' quiver_install("demo-skill", source, agent = "claude")
-#' }
+#' source
 #'
 #' @export
 local_source <- function(path) {

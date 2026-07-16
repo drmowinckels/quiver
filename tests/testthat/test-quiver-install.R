@@ -16,7 +16,7 @@ describe("quiver_install()", {
     dest <- skill_dir("claude", "project", root, "demo-skill")
     expect_true(fs::file_exists(fs::path(dest, "SKILL.md")))
     expect_true(fs::file_exists(fs::path(dest, "references", "foo.md")))
-    expect_equal(result, as.character(dest))
+    expect_identical(result, as.character(dest))
 
     manifest <- read_manifest("claude", "project", root)
     expect_false(is.na(manifest$skills[["demo-skill"]]$checksum))
@@ -69,7 +69,7 @@ describe("quiver_install()", {
     )
     expect_match(paste(messages, collapse = ""), "skipping")
 
-    expect_equal(readLines(skill_file), "hand-edited")
+    expect_identical(readLines(skill_file), "hand-edited")
   })
 
   it("overwrites an already-installed skill when force = TRUE", {
@@ -92,7 +92,7 @@ describe("quiver_install()", {
     )
     expect_match(paste(messages, collapse = ""), "Installed")
 
-    expect_equal(readLines(skill_file)[1], "---")
+    expect_identical(readLines(skill_file)[1], "---")
     expect_false(identical(readLines(skill_file), "hand-edited"))
   })
 

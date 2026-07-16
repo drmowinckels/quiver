@@ -7,10 +7,13 @@
 #'
 #' @return A data frame with columns `skill` and `modified`, invisibly.
 #'
+#' @example man-roxygen/ex-setup-source.R
 #' @examples
-#' \dontrun{
-#' quiver_status(agent = "claude")
-#' }
+#' project <- tempfile("quiver-project")
+#' dir.create(project)
+#' quiver_install("demo-skill", source, agent = "claude", path = project)
+#'
+#' quiver_status(agent = "claude", path = project)
 #'
 #' @export
 quiver_status <- function(

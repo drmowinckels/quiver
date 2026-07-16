@@ -1,0 +1,119 @@
+---
+title: "Get started with quiver"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started with quiver}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| label: knitr-setup
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+#| label: setup
+library(quiver)
+```
+
+A quiver holds arrows so they're within reach the moment you need one.
+This package does the same job for [Agent Skills](https://www.anthropic.com/news/skills): a `SKILL.md` with instructions, plus whatever reference files it needs, kept somewhere an agent can reach it.
+quiver copies that folder into place, and remembers what it copied — so later, it can tell you whether you've hand-edited it since.
+
+## A source to install from
+
+quiver draws skills from a _source_.
+The only one it knows about today is `local_source()`, which treats a directory as a checkout of a skills repository: skills live under `skills/<name>/`, each with its own `SKILL.md`.
+
+This vignette builds one from scratch so the example is fully runnable.
+In practice, `path` would be a checkout of a real skills repository sitting on disk.
+
+```{r}
+#| label: build-source
+checkout <- withr::local_tempdir()
+
+skill_dir <- file.path(checkout, "skills", "demo-skill")
+dir.create(skill_dir, recursive = TRUE)
+writeLines(
+  c(
+    "---",
+    "name: demo-skill",
+    "description: A minimal example skill.",
+    "---",
+    "",
+    "# Demo skill",
+    "",
+    "Say hello."
+  ),
+  file.path(skill_dir, "SKILL.md")
+)
+
+source <- local_source(checkout)
+```
+
+## Installing a skill
+
+`quiver_install()` takes a skill from the source and puts it where the given `agent` reads skills from.
+`quiver_agents()` lists the agents quiver knows how to install for:
+
+```{r}
+#| label: agents
+quiver_agents()
+```
+
+Skills install at project scope (under a project directory) or user scope (in the agent's directory under the user's home).
+This vignette uses an isolated temporary directory as the project, so nothing here touches your actual machine:
+
+```{r}
+#| label: install
+project <- withr::local_tempdir()
+
+quiver_install("demo-skill", source, agent = "claude", path = project)
+```
+
+The skill now lives under `.claude/skills/demo-skill/` inside `project`, alongside the other files Claude reads.
+
+## Checking status
+
+`quiver_status()` reports what's installed, and whether any installed skill has been hand-edited since quiver installed it — its on-disk checksum no longer matches what was written:
+
+```{r}
+#| label: status
+quiver_status(agent = "claude", path = project)
+```
+
+Editing a file inside the installed skill and checking again shows the change:
+
+```{r}
+#| label: status-after-edit
+writeLines(
+  "Say hello, warmly.",
+  file.path(project, ".claude", "skills", "demo-skill", "SKILL.md")
+)
+
+quiver_status(agent = "claude", path = project)
+```
+
+By default, `quiver_install()` leaves a hand-edited skill alone rather than clobbering it — installing again with the same name is a no-op unless you pass `force = TRUE`.
+
+## Removing a skill
+
+`quiver_remove()` pulls an installed skill back out.
+A hand-edited skill stays put unless `force = TRUE`, the same protection `quiver_install()` gives it:
+
+```{r}
+#| label: remove
+quiver_remove("demo-skill", agent = "claude", path = project, force = TRUE)
+
+quiver_status(agent = "claude", path = project)
+```
+
+## What's next
+
+This release only carries one source: `local_source()`.
+A 'GitHub' source and a curated registry are next, so a skill can be installed straight from a repository or a catalogue without a local checkout first — see the [README](https://github.com/drmowinckels/quiver#status) for current status.

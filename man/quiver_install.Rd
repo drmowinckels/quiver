@@ -41,9 +41,17 @@ Copies one or more skills from \code{source} into the directory the given
 skills are left untouched unless \code{force = TRUE}.
 }
 \examples{
-\dontrun{
-source <- local_source("path/to/checkout")
-quiver_install("demo-skill", source, agent = "claude")
-}
+checkout <- tempfile("quiver-checkout")
+dir.create(file.path(checkout, "skills", "demo-skill"), recursive = TRUE)
+writeLines(
+  c("---", "name: demo-skill", "description: Demo skill.", "---"),
+  file.path(checkout, "skills", "demo-skill", "SKILL.md")
+)
+
+source <- local_source(checkout)
+project <- tempfile("quiver-project")
+dir.create(project)
+
+quiver_install("demo-skill", source, agent = "claude", path = project)
 
 }

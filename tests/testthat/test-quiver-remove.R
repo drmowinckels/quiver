@@ -7,7 +7,7 @@ describe("quiver_remove()", {
       result <- quiver_remove("demo-skill", agent = "claude", path = root)
     )
 
-    expect_equal(result, "demo-skill")
+    expect_identical(result, "demo-skill")
     expect_false(fs::dir_exists(skill_dir(
       "claude",
       "project",
@@ -86,7 +86,7 @@ describe("quiver_remove()", {
     expect_snapshot(
       result <- quiver_remove("not-installed", agent = "claude", path = root)
     )
-    expect_equal(result, character())
+    expect_identical(result, character())
   })
 
   it("errors when skill is not a non-empty character vector", {

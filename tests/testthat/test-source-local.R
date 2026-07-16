@@ -15,20 +15,20 @@ describe("source_list_skills.local_source()", {
   it("lists skills that have a SKILL.md", {
     root <- local_source_root()
     source <- local_source(root)
-    expect_equal(source_list_skills(source), c("demo-skill", "other-skill"))
+    expect_identical(source_list_skills(source), c("demo-skill", "other-skill"))
   })
 
   it("returns an empty vector when there is no skills/ directory", {
     root <- withr::local_tempdir()
     source <- local_source(root)
-    expect_equal(source_list_skills(source), character())
+    expect_identical(source_list_skills(source), character())
   })
 
   it("ignores a skills/ subdirectory without a SKILL.md", {
     root <- local_source_root()
     fs::dir_create(fs::path(root, "skills", "not-a-skill"))
     source <- local_source(root)
-    expect_equal(source_list_skills(source), c("demo-skill", "other-skill"))
+    expect_identical(source_list_skills(source), c("demo-skill", "other-skill"))
   })
 })
 
@@ -73,7 +73,7 @@ describe("source_copy_file.local_source()", {
     source_copy_file(source, "demo-skill", row, dest)
 
     expect_true(fs::file_exists(dest))
-    expect_equal(readLines(dest), readLines(row$abspath))
+    expect_identical(readLines(dest), readLines(row$abspath))
   })
 })
 
@@ -81,7 +81,7 @@ describe("source_identifier.local_source()", {
   it("reports type local and the absolute path", {
     root <- local_source_root()
     source <- local_source(root)
-    expect_equal(
+    expect_identical(
       source_identifier(source),
       list(type = "local", path = as.character(source$path))
     )
