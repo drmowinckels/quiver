@@ -47,4 +47,9 @@ This is an early, local-source-only slice: `local_source()` and the
 
 ## Contributing
 
-Issues and PRs welcome. See `NEWS.md` for what's changed.
+Issues and PRs welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). See
+`NEWS.md` for what's changed.
+
+Please note that quiver is released with a
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this
+project you agree to abide by its terms.

@@ -4,3 +4,4 @@
   `quiver_remove()`, with a pluggable source (`local_source()`) and
   pluggable agent adapters (`quiver_agents()`: `claude`, `opencode`), at
   project or user scope.
+- Added a "Get started with quiver" vignette.

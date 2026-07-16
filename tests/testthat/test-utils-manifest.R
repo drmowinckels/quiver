@@ -1,7 +1,7 @@
 describe("read_manifest() / write_manifest()", {
   it("returns an empty manifest when none exists yet", {
     root <- withr::local_tempdir()
-    expect_equal(
+    expect_identical(
       read_manifest("claude", "project", root),
       list(skills = list())
     )
@@ -13,7 +13,7 @@ describe("read_manifest() / write_manifest()", {
     write_manifest("claude", "project", root, manifest)
 
     roundtripped <- read_manifest("claude", "project", root)
-    expect_equal(roundtripped$skills$`demo-skill`$checksum, "abc")
+    expect_identical(roundtripped$skills$`demo-skill`$checksum, "abc")
   })
 
   it("defaults skills to an empty list when the file lacks that key", {
@@ -25,7 +25,7 @@ describe("read_manifest() / write_manifest()", {
       auto_unbox = TRUE
     )
 
-    expect_equal(read_manifest("claude", "project", root)$skills, list())
+    expect_identical(read_manifest("claude", "project", root)$skills, list())
   })
 
   it("writes the manifest under the agent's skills directory", {
@@ -50,7 +50,7 @@ describe("compute_skill_checksum()", {
     writeLines("b", fs::path(dir2, "b.txt"))
     writeLines("a", fs::path(dir2, "a.txt"))
 
-    expect_equal(compute_skill_checksum(dir1), compute_skill_checksum(dir2))
+    expect_identical(compute_skill_checksum(dir1), compute_skill_checksum(dir2))
   })
 
   it("changes when a file's contents change", {
@@ -86,8 +86,8 @@ describe("update_manifest_entry()", {
 
     manifest <- read_manifest("claude", "project", root)
     entry <- manifest$skills$`demo-skill`
-    expect_equal(entry$checksum, "abc123")
-    expect_equal(entry$source$type, "local")
+    expect_identical(entry$checksum, "abc123")
+    expect_identical(entry$source$type, "local")
   })
 })
 

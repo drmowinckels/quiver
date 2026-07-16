@@ -10,15 +10,20 @@ Description: A source- and agent-agnostic engine for installing Agent
     agent adapter, at project or user scope, with checksum-based
     protection against clobbering hand edits.
 License: MIT + file LICENSE
+URL: https://github.com/drmowinckels/quiver
+BugReports: https://github.com/drmowinckels/quiver/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Imports: 
+Imports:
     cli,
     digest,
     fs,
     jsonlite
-Suggests: 
+Suggests:
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0),
     withr
+VignetteBuilder: knitr
 Config/testthat/edition: 3

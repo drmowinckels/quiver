@@ -19,11 +19,12 @@
 #'
 #' @return The path(s) to the installed skill folder(s), invisibly.
 #'
+#' @example man-roxygen/ex-setup-source.R
 #' @examples
-#' \dontrun{
-#' source <- local_source("path/to/checkout")
-#' quiver_install("demo-skill", source, agent = "claude")
-#' }
+#' project <- tempfile("quiver-project")
+#' dir.create(project)
+#'
+#' quiver_install("demo-skill", source, agent = "claude", path = project)
 #'
 #' @export
 quiver_install <- function(

@@ -11,10 +11,13 @@
 #'
 #' @return The names of the skills that were removed, invisibly.
 #'
+#' @example man-roxygen/ex-setup-source.R
 #' @examples
-#' \dontrun{
-#' quiver_remove("demo-skill", agent = "claude")
-#' }
+#' project <- tempfile("quiver-project")
+#' dir.create(project)
+#' quiver_install("demo-skill", source, agent = "claude", path = project)
+#'
+#' quiver_remove("demo-skill", agent = "claude", path = project)
 #'
 #' @export
 quiver_remove <- function(
@@ -34,40 +37,54 @@ quiver_remove <- function(
   removed <- character()
 
   for (s in skill) {
-    dest <- skill_dir(agent, scope, path, s)
-    if (!fs::dir_exists(dest)) {
-      cli::cli_alert_info(
-        "{.field {s}} is not installed for {.val {agent}} ({.val {scope}})"
-      )
-      next
+    if (quiver_remove_one(s, agent, scope, path, force)) {
+      manifest$skills[[s]] <- NULL
+      removed <- c(removed, s)
     }
+  }
 
-    modified <- skill_is_modified(agent, scope, path, s)
-    if (!isFALSE(modified) && !force) {
-      cli::cli_alert_warning(paste(
-        "{.field {s}} has local changes or is untracked \u2014 skipping",
-        "({.code force = TRUE} to remove anyway)"
-      ))
-      next
-    }
+  finalize_removal_manifest(agent, scope, path, manifest)
 
-    fs::dir_delete(dest)
-    manifest$skills[[s]] <- NULL
-    removed <- c(removed, s)
-    cli::cli_alert_success("Removed {.field {s}}")
+  invisible(removed)
+}
+
+quiver_remove_one <- function(skill, agent, scope, path, force) {
+  dest <- skill_dir(agent, scope, path, skill)
+  if (!fs::dir_exists(dest)) {
+    cli::cli_alert_info(
+      "{.field {skill}} is not installed for {.val {agent}} ({.val {scope}})"
+    )
+    return(FALSE)
+  }
+
+  modified <- skill_is_modified(agent, scope, path, skill)
+  if (!isFALSE(modified) && !force) {
+    cli::cli_alert_warning(paste(
+      "{.field {skill}} has local changes or is untracked \u2014 skipping",
+      "({.code force = TRUE} to remove anyway)"
+    ))
+    return(FALSE)
+  }
+
+  fs::dir_delete(dest)
+  cli::cli_alert_success("Removed {.field {skill}}")
+  TRUE
+}
+
+finalize_removal_manifest <- function(agent, scope, path, manifest) {
+  if (length(manifest$skills) > 0) {
+    write_manifest(agent, scope, path, manifest)
+    return(invisible())
+  }
+
+  if (fs::file_exists(manifest_path(agent, scope, path))) {
+    fs::file_delete(manifest_path(agent, scope, path))
   }
 
   skills_root <- agent_skills_dir(agent, scope, path)
-  if (length(manifest$skills) == 0) {
-    if (fs::file_exists(manifest_path(agent, scope, path))) {
-      fs::file_delete(manifest_path(agent, scope, path))
-    }
-    if (fs::dir_exists(skills_root) && length(fs::dir_ls(skills_root)) == 0) {
-      fs::dir_delete(skills_root)
-    }
-  } else {
-    write_manifest(agent, scope, path, manifest)
+  if (fs::dir_exists(skills_root) && length(fs::dir_ls(skills_root)) == 0) {
+    fs::dir_delete(skills_root)
   }
 
-  invisible(removed)
+  invisible()
 }
