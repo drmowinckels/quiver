@@ -2,9 +2,9 @@
 
 A source- and agent-agnostic engine for installing [Agent
 Skills](https://www.anthropic.com/news/skills) into a project or user
-profile. `quiver` resolves a skill from a source — a local directory today,
-a 'GitHub' repository or curated registry later — and installs it for a
-given agent adapter, at project or user scope, with checksum-based
+profile. `quiver` resolves a skill from a source — a local directory or a
+'GitHub' repository today, a curated registry later — and installs it for
+a given agent adapter, at project or user scope, with checksum-based
 protection against clobbering hand edits.
 
 It grew out of duplicating the same fetch/checksum/install logic across a
@@ -35,15 +35,28 @@ quiver_status(agent = "claude")     # what's installed, and what's been hand-edi
 quiver_remove("demo-skill", agent = "claude")
 ```
 
-A source points at a checkout with the same layout 'GitHub'-hosted skill
-repositories use: `skills/<name>/SKILL.md`, with any supporting files
-(e.g. `references/`) alongside it.
+A local source points at a checkout with the same layout 'GitHub'-hosted
+skill repositories use: `skills/<name>/SKILL.md`, with any supporting
+files (e.g. `references/`) alongside it.
+
+Skills can also be installed straight from 'GitHub', with `github_source()`
+or one of the catalogue constructors built on it:
+
+```r
+quiver_install("package-review", ropensci_skills(), agent = "claude")
+quiver_install("testing-r-packages", posit_skills(), agent = "claude")
+quiver_install("rladies-blog-post", rladies_grimoire(), agent = "claude")
+
+# or point at any 'GitHub' repository directly
+quiver_install("demo-skill", github_source("owner/repo"), agent = "claude")
+```
 
 ## Status
 
-This is an early, local-source-only slice: `local_source()` and the
-`claude`/`opencode` agent adapters. A 'GitHub' source (ported from
-`grimoire`) and a curated registry source are planned next.
+`local_source()` and `github_source()` (plus the `ropensci_skills()`,
+`posit_skills()`, and `rladies_grimoire()` catalogue constructors) are
+available now, alongside the `claude`/`opencode` agent adapters. A curated
+registry source is planned next.
 
 ## Contributing
 

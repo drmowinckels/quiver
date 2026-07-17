@@ -28,9 +28,10 @@ quiver copies that folder into place, and remembers what it copied — so later,
 ## A source to install from
 
 quiver draws skills from a _source_.
-The only one it knows about today is `local_source()`, which treats a directory as a checkout of a skills repository: skills live under `skills/<name>/`, each with its own `SKILL.md`.
+This vignette uses `local_source()`, which treats a directory as a checkout of a skills repository: skills live under `skills/<name>/`, each with its own `SKILL.md`.
+A skill can also be installed straight from 'GitHub' with `github_source()` — see [Installing straight from 'GitHub'](#installing-straight-from-github) below.
 
-This vignette builds one from scratch so the example is fully runnable.
+This vignette builds a local source from scratch so the example is fully runnable.
 In practice, `path` would be a checkout of a real skills repository sitting on disk.
 
 ```{r}
@@ -113,7 +114,26 @@ quiver_remove("demo-skill", agent = "claude", path = project, force = TRUE)
 quiver_status(agent = "claude", path = project)
 ```
 
+## Installing straight from 'GitHub'
+
+Skills don't need a local checkout first: `github_source()` installs
+straight from a 'GitHub' repository, finding any `SKILL.md` in the tree —
+whether the repo uses a flat `skills/<name>/` layout or groups skills
+under categories.
+
+Three catalogue constructors wrap `github_source()` for known skill
+catalogues, so you don't need to remember the repository slug: `?ropensci_skills`,
+`?posit_skills`, and `?rladies_grimoire`. These need a network connection,
+so they're not run in this vignette:
+
+```r
+quiver_install("package-review", ropensci_skills(), agent = "claude")
+quiver_install("testing-r-packages", posit_skills(), agent = "claude")
+quiver_install("rladies-blog-post", rladies_grimoire(), agent = "claude")
+```
+
 ## What's next
 
-This release only carries one source: `local_source()`.
-A 'GitHub' source and a curated registry are next, so a skill can be installed straight from a repository or a catalogue without a local checkout first — see the [README](https://github.com/drmowinckels/quiver#status) for current status.
+A curated registry source is next, so a skill can be installed from a
+catalogue without knowing its repository at all — see the
+[README](https://github.com/drmowinckels/quiver#status) for current status.

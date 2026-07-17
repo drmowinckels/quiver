@@ -7,3 +7,11 @@ describe("is_quiver_source()", {
     expect_false(is_quiver_source(list(path = ".")))
   })
 })
+
+describe("ensure_parent_dir()", {
+  it("creates missing nested parent directories", {
+    dest <- fs::path(withr::local_tempdir(), "nested", "deep", "SKILL.md")
+    ensure_parent_dir(dest)
+    expect_true(fs::dir_exists(fs::path_dir(dest)))
+  })
+})

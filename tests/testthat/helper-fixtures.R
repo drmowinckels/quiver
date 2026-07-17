@@ -43,7 +43,7 @@ install_skill <- function(
   env = parent.frame()
 ) {
   source_root <- local_source_root(env = env)
-  testthat::capture_messages(
+  capture_messages(
     quiver_install(
       skill,
       local_source(source_root),
@@ -54,3 +54,54 @@ install_skill <- function(
   )
   invisible(NULL)
 }
+
+fixture_github_tree <- function() {
+  list(
+    list(path = "skills/demo-skill/SKILL.md", type = "blob", sha = "sha1"),
+    list(
+      path = "skills/demo-skill/references/foo.md",
+      type = "blob",
+      sha = "sha2"
+    ),
+    list(path = "skills", type = "tree", sha = "sha3"),
+    list(path = "alt-text/SKILL.md", type = "blob", sha = "sha4"),
+    list(
+      path = "quarto/quarto-authoring/SKILL.md",
+      type = "blob",
+      sha = "sha5"
+    ),
+    list(
+      path = "quarto/quarto-authoring/references/tables.md",
+      type = "blob",
+      sha = "sha6"
+    ),
+    list(path = "quarto", type = "tree", sha = "sha7"),
+    list(path = "README.md", type = "blob", sha = "sha8"),
+    list(
+      path = ".claude-plugin/hidden-skill/SKILL.md",
+      type = "blob",
+      sha = "sha9"
+    )
+  )
+}
+
+local_mocked_github_source <- function(env = parent.frame(), sha = "deadbeef") {
+  local_mocked_bindings(
+    resolve_ref = function(repo, ref = NULL) ref %||% "v0.1.0",
+    resolve_commit_sha = function(repo, ref) sha,
+    get_repo_tree = function(repo, sha) fixture_github_tree(),
+    download_file_to = function(repo, sha, path, dest) {
+      fs::dir_create(fs::path_dir(dest), recurse = TRUE)
+      content <- if (basename(path) == "SKILL.md") {
+        fixture_skill_md(fs::path_file(fs::path_dir(path)))
+      } else {
+        "reference body\n"
+      }
+      writeLines(content, dest)
+      invisible(dest)
+    },
+    .env = env
+  )
+}
+
+`%||%` <- function(x, y) if (is.null(x)) y else x

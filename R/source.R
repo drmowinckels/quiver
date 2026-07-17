@@ -13,3 +13,7 @@ source_copy_file <- function(source, skill, file, dest) {
 }
 
 source_identifier <- function(source) UseMethod("source_identifier")
+
+ensure_parent_dir <- function(dest) {
+  fs::dir_create(fs::path_dir(dest), recurse = TRUE)
+}
